@@ -1080,19 +1080,16 @@ void RetroEngine::Callback(int callbackID)
             stageMode = STAGEMODE_LOAD;
             break;
         case CALLBACK_EXIT_SELECTED:
-            // gameMode = ENGINE_EXITGAME;
             PrintLog("Callback: Exit Selected");
             if (bytecodeMode == BYTECODE_PC) {
                 running = false;
             }
             else {
-                activeStageList   = 0;
-                stageListPosition = 0;
-                stageMode         = STAGEMODE_LOAD;
+               gameMode = ENGINE_EXITGAME;
             }
             break;
         case CALLBACK_BUY_FULL_GAME_SELECTED: //, Mobile = Buy Full Game Selected (Trial Mode Only)
-            gameMode = ENGINE_EXITGAME;
+            //gameMode = ENGINE_EXITGAME;
             PrintLog("Callback: Buy Full Game Selected");
             break;
         case CALLBACK_TERMS_SELECTED: // PC = How to play, Mobile = Full Game Only Screen

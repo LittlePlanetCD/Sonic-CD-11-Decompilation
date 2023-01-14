@@ -359,6 +359,7 @@ void InitUserdata()
         ini.SetBool("Game", "DisableTouchControls", disableTouchControls = false);
         ini.SetInteger("Game", "DisableFocusPause", disableFocusPause = 0);
         disableFocusPause_Config = disableFocusPause;
+		ini.SetBool("Game", "trialMode", Engine.trialMode = false);
 
         ini.SetBool("Window", "FullScreen", Engine.startFullScreen = DEFAULT_FULLSCREEN);
         ini.SetBool("Window", "Borderless", Engine.borderless = false);
@@ -487,6 +488,8 @@ void InitUserdata()
             else if (platype == 1)
                 Engine.gamePlatform = "Mobile";
         }
+		if (!ini.GetBool("Game", "trialMode", &Engine.trialMode))
+            Engine.trialMode = false;
 
         if (!ini.GetBool("Window", "FullScreen", &Engine.startFullScreen))
             Engine.startFullScreen = DEFAULT_FULLSCREEN;
@@ -789,6 +792,8 @@ void WriteSettings()
     ini.SetInteger("Game", "DisableFocusPause", disableFocusPause_Config);
     ini.SetComment("Game", "PlatformComment", "The platform type. 0 is standard (PC/Console), 1 is mobile");
     ini.SetInteger("Game", "Platform", !StrComp(Engine.gamePlatform, "Standard"));
+    ini.SetComment("Game", "trialModeComment", "Determines if the game is running Lite / Trial mode (only usable with Mobile data files)");
+    ini.SetBool("Game", "trialMode", Engine.trialMode);
 
     ini.SetComment("Window", "FSComment", "Determines if the window will be fullscreen or not");
     ini.SetBool("Window", "FullScreen", Engine.startFullScreen);

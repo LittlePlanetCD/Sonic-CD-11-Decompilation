@@ -1945,8 +1945,10 @@ void DrawStageGFX()
 
     DrawObjectList(5);
     DrawObjectList(6);
+#if RETRO_USE_ORIGINS_LAYERS
 	// Extra Origins draw list
     DrawObjectList(7);
+#endif
 
 #if !RETRO_USE_ORIGINAL_CODE
     if (drawStageGFXHQ)

@@ -307,6 +307,7 @@ void ProcessStage(void)
 			// Extra Origins draw list
             DrawObjectList(7);
 #endif
+
 #if !RETRO_USE_ORIGINAL_CODE
             DrawDebugOverlays();
 #endif

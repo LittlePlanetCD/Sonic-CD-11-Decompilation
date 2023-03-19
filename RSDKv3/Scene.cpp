@@ -302,7 +302,7 @@ void ProcessStage(void)
             DrawObjectList(3);
             DrawObjectList(4);
             DrawObjectList(5);
-#if RETRO_USE_ORIGINS_LAYERS
+#if !RETRO_USE_ORIGINAL_CODE
             // Hacky fix for Tails Object not working properly on non-Origins bytecode
             if (!Engine.usingBytecode || GetGlobalVariableByName("NOTIFY_1P_VS_SELECT") != 0)
 #endif

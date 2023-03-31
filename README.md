@@ -1,6 +1,6 @@
 ![](header.png?raw=true)
 
-A complete decompilation of Retro Engine v3.
+A complete decompilation of Retro Engine v3, coupled with a few additions.
 
 # **SUPPORT THE OFFICIAL RELEASE OF SONIC CD**
 + Without assets from the official release, this decompilation will not run.

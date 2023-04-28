@@ -955,10 +955,10 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
         }
 #if RETRO_USE_MOD_LOADER
         SetGlobalVariableByName("Engine.Standalone", true);
+        SetGlobalVariableByName("Engine.DeviceType", RETRO_GAMEPLATFORM);
 #endif
 
-        SetGlobalVariableByName("Engine.PlatformId", RETRO_GAMEPLATFORMID);
-        SetGlobalVariableByName("Engine.DeviceType", RETRO_GAMEPLATFORM);
+        SetGlobalVariableByName("Engine.PlatformID", RETRO_GAMEPLATFORMID);
 
         // Read SFX
         byte sfxCount = 0;
@@ -1017,7 +1017,10 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
         if (!disableSaveIniOverride) {
 #endif
             if (controlMode >= 0) {
-                saveRAM[35] = controlMode;
+                if (ReadSaveRAMData()) {
+                    saveRAM[35] = controlMode;
+                    WriteSaveRAMData();
+                }
                 SetGlobalVariableByName("Options.OriginalControls", controlMode);
             }
 #if RETRO_USE_MOD_LOADER

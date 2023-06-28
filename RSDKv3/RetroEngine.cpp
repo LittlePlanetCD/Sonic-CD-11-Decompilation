@@ -959,6 +959,9 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
 #endif
 
         SetGlobalVariableByName("Engine.PlatformID", RETRO_GAMEPLATFORMID);
+#if !RETRO_USE_ORIGINAL_CODE
+		SetGlobalVariableByName("Config.IsPremiumUser", 1);			// this gets around the game over ui lol
+#endif
 
         // Read SFX
         byte sfxCount = 0;

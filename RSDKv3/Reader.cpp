@@ -149,6 +149,8 @@ bool LoadFile(const char *filePath, FileInfo *fileInfo)
                 }
             }
         }
+        if (activeMod != -1)
+            break;
     }
 
     if (forceUseScripts && !Engine.forceFolder) {

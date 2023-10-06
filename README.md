@@ -44,9 +44,11 @@ Even if your platform isn't supported by the official releases, you **must** buy
 
 # How to Build
 
-This project uses [CMake](https://cmake.org/), a versatile building system that supports many different compilers and platforms. You can download CMake [here](https://cmake.org/download/).
+This project uses [CMake](https://cmake.org/), a versatile building system that supports many different compilers and platforms. You can download CMake [here](https://cmake.org/download/). **(Make sure to enable the feature to add CMake to the system PATH during the installation!)**
 
 ## Get the source code
+
+In order to clone the repository, you need to install Git, which you can get [here](https://git-scm.com/downloads).
 
 Clone the repo **recursively**, using:
 `git clone --recursive https://github.com/Rubberduckycooly/Sonic-CD-11-Decompilation`
@@ -57,15 +59,19 @@ If you've already cloned the repo, run this command inside of the repository:
 ## Follow the build steps
 
 ### Windows
-[Install vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows), then run the following in Command Prompt:
-- `[vcpkg root]\vcpkg.exe install glew sdl2 libogg libtheora libvorbis --triplet=x64-windows-static` (the triplet can be whatever preferred)
+To handle dependencies, you'll need to install [Visual Studio Community](https://visualstudio.microsoft.com/downloads/) (make sure to install the `Desktop development with C++` package during the installation) and [vcpkg](https://github.com/microsoft/vcpkg#quick-start-windows).
 
-Finally, follow the [compilation steps below](#compiling) using `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=[chosen triplet] -DCMAKE_PREFIX_PATH=[vcpkg root]/installed/[chosen triplet]/` as arguments for `cmake -Bbuild`.
+After installing those, run the following in Command Prompt (make sure to replace `[vcpkg root]` with the path to the vcpkg installation!):
+- `[vcpkg root]\vcpkg.exe install glew sdl2 libogg libtheora libvorbis --triplet=x64-windows-static` (If you're compiling a 32-bit build, replace `x64-windows-static` with `x86-windows-static`.)
+
+Finally, follow the [compilation steps below](#compiling) using `-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_PREFIX_PATH=[vcpkg root]/installed/x64-windows-static/` as arguments for `cmake -B build`.
+  - Make sure to replace each instance of `[vcpkg root]` with the path to the vcpkg installation!
+  - If you're compiling a 32-bit build, replace each instance of `x64-windows-static` with `x86-windows-static`.
 
 ### Linux
 Install the following dependencies: then follow the [compilation steps below](#compiling):
 - **pacman (Arch):** `sudo pacman -S base-devel cmake glew sdl2 libogg libtheora libvorbis`
-- **apt (Debian/Ubuntu):** `sudo apt install build-essential cmake libglew-dev libglfw3-dev sdl2-dev libogg-dev libtheora-dev libvorbis-dev`
+- **apt (Debian/Ubuntu):** `sudo apt install build-essential cmake libglew-dev libglfw3-dev libsdl2-dev libogg-dev libtheora-dev libvorbis-dev`
 - **rpm (Fedora):** `sudo dnf install make gcc cmake glew-devel glfw-devel sdl2-devel libogg-devel libtheora-devel libvorbis-devel zlib-devel`
 - Your favorite package manager here, [make a pull request](https://github.com/Rubberduckycooly/Sonic-CD-11-Decompilation/fork)
 
@@ -76,14 +82,14 @@ Follow the android build instructions [here.](./dependencies/android/README.md)
 
 Compiling is as simple as typing the following in the root repository directory:
 ```
-cmake -Bbuild # add additional flags here
-cmake --build build
+cmake -B build
+cmake --build build --config release
 ```
 
 The resulting build will be located somewhere in `build/` depending on your system.
 
 The following cmake arguments are available when compiling:
-- Use these on the first `cmake -Bbuild` step like so: `cmake -Bbuild -DRETRO_DISABLE_PLUS=on`
+- Use these on the first `cmake -B build` step like so: `cmake -B build -DRETRO_DISABLE_PLUS=on`
 
 ### RSDKv3 flags
 - `RETRO_DISABLE_PLUS`: Whether or not to disable the Plus DLC. Takes a boolean (on/off): build with `on` when compiling for distribution. Defaults to `off`.

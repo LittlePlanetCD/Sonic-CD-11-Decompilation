@@ -359,7 +359,7 @@ void InitUserdata()
         ini.SetBool("Game", "DisableTouchControls", disableTouchControls = false);
         ini.SetInteger("Game", "DisableFocusPause", disableFocusPause = 0);
         disableFocusPause_Config = disableFocusPause;
-		ini.SetBool("Game", "trialMode", Engine.trialMode = false);
+        ini.SetBool("Game", "trialMode", Engine.trialMode = false);
 
         ini.SetBool("Window", "FullScreen", Engine.startFullScreen = DEFAULT_FULLSCREEN);
         ini.SetBool("Window", "Borderless", Engine.borderless = false);
@@ -488,7 +488,7 @@ void InitUserdata()
             else if (platype == 1)
                 Engine.gamePlatform = "Mobile";
         }
-		if (!ini.GetBool("Game", "trialMode", &Engine.trialMode))
+        if (!ini.GetBool("Game", "trialMode", &Engine.trialMode))
             Engine.trialMode = false;
 
         if (!ini.GetBool("Window", "FullScreen", &Engine.startFullScreen))

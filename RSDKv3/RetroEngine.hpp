@@ -420,6 +420,9 @@ public:
 #endif
     bool usingDataFile = false;
     bool usingBytecode = false;
+#if !RETRO_USE_ORIGINAL_CODE
+    bool usingOrigins  = false;
+#endif
     byte bytecodeMode  = BYTECODE_MOBILE;
     bool forceFolder   = false;
 
@@ -443,7 +446,7 @@ public:
     int frameSkipSetting = 0;
     int frameSkipTimer   = 0;
 
-    bool useSteamDir = true;
+    bool useSteamDir = false;
 
 #if !RETRO_USE_ORIGINAL_CODE
     // Ported from RSDKv5

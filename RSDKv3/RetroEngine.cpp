@@ -140,6 +140,8 @@ bool ProcessEvents()
                             stageListPosition = 0;
                             stageMode         = STAGEMODE_LOAD;
                             Engine.gameMode   = ENGINE_MAINGAME;
+                            if (Engine.highResMode)
+                                Engine.highResMode = false;
                         }
                         break;
 
@@ -158,6 +160,8 @@ bool ProcessEvents()
                             Engine.gameMode = ENGINE_MAINGAME;
                             SetGlobalVariableByName("LampPost.Check", 0);
                             SetGlobalVariableByName("Warp.XPos", 0);
+                            if (Engine.highResMode)
+                                Engine.highResMode = false;
                         }
                         break;
 
@@ -177,6 +181,8 @@ bool ProcessEvents()
                             Engine.gameMode = ENGINE_MAINGAME;
                             SetGlobalVariableByName("LampPost.Check", 0);
                             SetGlobalVariableByName("Warp.XPos", 0);
+                            if (Engine.highResMode)
+                                Engine.highResMode = false;
                         }
                         break;
 

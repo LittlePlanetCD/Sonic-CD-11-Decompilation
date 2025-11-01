@@ -223,6 +223,9 @@ enum RetroStates {
     ENGINE_PAUSE           = 7,
     ENGINE_WAIT            = 8,
     ENGINE_VIDEOWAIT       = 9,
+#if RETRO_USE_MOD_LOADER
+    ENGINE_INITMODMENU = 0x82,
+#endif
 };
 
 enum RetroEngineMessages {
@@ -328,6 +331,9 @@ enum RetroEngineCallbacks {
     // Mod CBs start at 0x1000
     CALLBACK_SET1P = 0x1001,
     CALLBACK_SET2P = 0x1002,
+    CALLBACK_GETWINDOWINFO    = 0x1003,
+    CALLBACK_SETWINDOWCHANGES = 0x1004,
+    CALLBACK_OPENMODMENU      = 0x1005,
 #endif
 };
 
@@ -516,6 +522,10 @@ public:
     const char *gameHapticSetting = "Use_Haptics";
 #else
     const char *gameHapticSetting = "No_Haptics";
+#endif
+
+#if RETRO_USE_MOD_LOADER
+    bool modMenuCalled = false;
 #endif
 
     int gameTypeID          = 0;

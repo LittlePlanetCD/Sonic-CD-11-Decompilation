@@ -632,10 +632,13 @@ void RetroEngine::LoadXMLVariables()
                             if (valAttr)
                                 varValue = GetXMLAttributeValueInt(valAttr);
 
-                            StrCopy(globalVariableNames[globalVariablesCount], varName);
-                            globalVariables[globalVariablesCount] = varValue;
-                            globalVariablesCount++;
-
+                            if (globalVariablesCount >= GLOBALVAR_COUNT)
+                                PrintLog("Failed to add global variable '%s' (max limit reached)", varName);
+                            else if (GetGlobalVariableID(varName) == 0xFF) {
+                                StrCopy(globalVariableNames[globalVariablesCount], varName);
+                                globalVariables[globalVariablesCount] = varValue;
+                                globalVariablesCount++;
+                            }
                         } while ((varElement = NextXMLSiblingElement(doc, varElement, "variable")));
                     }
                 }
@@ -1177,7 +1180,7 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
             startStage_Game = 0xFE;
         }
 
-        Engine.usingOrigins = GetGlobalVariableByName("NOTIFY_1P_VS_SELECT") != 0;
+        Engine.usingOrigins = GetGlobalVariableID("game.playMode") != 0xFF;
 #endif
 
         return true;

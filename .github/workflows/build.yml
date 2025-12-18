@@ -1,6 +1,14 @@
 name: Build RSDKv3
+
 on:
   push:
+    paths:
+      - android/**
+      - dependencies/**
+      - RSDKv3/**
+      - platforms/**
+      - .github/workflows/build.yml
+      - CMakeLists.txt
     branches:
       - master
 

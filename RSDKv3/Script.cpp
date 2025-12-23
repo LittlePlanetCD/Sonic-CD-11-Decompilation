@@ -1419,6 +1419,23 @@ void CheckCaseNumber(char *text)
         if (caseID > jumpTable[stackValue])
             jumpTable[stackValue] = caseID;
     }
+#if !RETRO_USE_ORIGINAL_CODE
+    else {
+        char varError[0x80];
+        StrAdd(varError, caseString);
+        SetupTextMenu(&gameMenu[0], 0);
+        AddTextMenuEntry(&gameMenu[0], "SCRIPT PARSING FAILED");
+        AddTextMenuEntry(&gameMenu[0], " ");
+        AddTextMenuEntry(&gameMenu[0], "INVALID SWITCH CASE");
+        AddTextMenuEntry(&gameMenu[0], varError);
+        AddTextMenuEntry(&gameMenu[0], " ");
+        AddTextMenuEntry(&gameMenu[0], "LINE NUMBER");
+        varError[0] = 0;
+        AppendIntegerToString(varError, lineID);
+        AddTextMenuEntry(&gameMenu[0], varError);
+        Engine.gameMode = ENGINE_SCRIPTERROR;
+    }
+#endif
 }
 bool ReadSwitchCase(char *text)
 {

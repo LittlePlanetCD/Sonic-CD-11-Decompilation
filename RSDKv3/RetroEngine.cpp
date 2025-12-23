@@ -632,10 +632,13 @@ void RetroEngine::LoadXMLVariables()
                             if (valAttr)
                                 varValue = GetXMLAttributeValueInt(valAttr);
 
-                            StrCopy(globalVariableNames[globalVariablesCount], varName);
-                            globalVariables[globalVariablesCount] = varValue;
-                            globalVariablesCount++;
-
+                            if (globalVariablesCount >= GLOBALVAR_COUNT)
+                                PrintLog("Failed to add global variable '%s' (max limit reached)", varName);
+                            else if (GetGlobalVariableID(varName) == 0xFF) {
+                                StrCopy(globalVariableNames[globalVariablesCount], varName);
+                                globalVariables[globalVariablesCount] = varValue;
+                                globalVariablesCount++;
+                            }
                         } while ((varElement = NextXMLSiblingElement(doc, varElement, "variable")));
                     }
                 }
@@ -1177,7 +1180,7 @@ bool RetroEngine::LoadGameConfig(const char *filePath)
             startStage_Game = 0xFE;
         }
 
-        Engine.usingOrigins = GetGlobalVariableByName("NOTIFY_1P_VS_SELECT") != 0;
+        Engine.usingOrigins = GetGlobalVariableID("game.playMode") != 0xFF;
 #endif
 
         return true;
@@ -1469,26 +1472,24 @@ void RetroEngine::Callback(int callbackID)
             break;
         case CALLBACK_SETWINDOWCHANGES:
             Engine.startFullScreen = Engine.isFullScreen; // Account for f4 toggle
-            for (int v = 0; v < globalVariablesCount; ++v) {
-                if (StrComp("Engine.Fullscreen", globalVariableNames[v])){
-                    Engine.startFullScreen = globalVariables[v];
-                    Engine.isFullScreen = Engine.startFullScreen;
-                }
-                else if (StrComp("Engine.Borderless", globalVariableNames[v]))
-                    Engine.borderless = globalVariables[v];
-                else if (StrComp("Engine.VSync", globalVariableNames[v]))
-                    Engine.vsync = globalVariables[v];
-                else if (StrComp("Engine.ScalingMode", globalVariableNames[v]))
-                    Engine.scalingMode = globalVariables[v];
-                else if (StrComp("Engine.WindowScale", globalVariableNames[v]))
-                    Engine.windowScale = globalVariables[v];
-                else if (StrComp("Engine.ScreenWidth", globalVariableNames[v])){
-                    SCREEN_XSIZE = globalVariables[v];
-                    SCREEN_XSIZE_CONFIG = SCREEN_XSIZE;
-                }
-                else if (StrComp("Engine.HardwareRenderer", globalVariableNames[v]))
-                    Engine.gameRenderType = gameRenderTypes[globalVariables[v]];
+            if (GetGlobalVariableID("Engine.Fullscreen") != 0xFF) {
+                Engine.startFullScreen = GetGlobalVariableByName("Engine.Fullscreen");
+                Engine.isFullScreen = Engine.startFullScreen;
             }
+            if (GetGlobalVariableID("Engine.Borderless") != 0xFF)
+                Engine.borderless = GetGlobalVariableByName("Engine.Borderless");
+            if (GetGlobalVariableID("Engine.VSync") != 0xFF)
+                Engine.vsync = GetGlobalVariableByName("Engine.VSync");
+            if (GetGlobalVariableID("Engine.ScalingMode") != 0xFF)
+                Engine.scalingMode = GetGlobalVariableByName("Engine.ScalingMode");
+            if (GetGlobalVariableID("Engine.WindowScale") != 0xFF)
+                Engine.windowScale = GetGlobalVariableByName("Engine.WindowScale");
+            if (GetGlobalVariableID("Engine.ScreenWidth") != 0xFF) {
+                SCREEN_XSIZE        = GetGlobalVariableByName("Engine.ScreenWidth");
+                SCREEN_XSIZE_CONFIG = SCREEN_XSIZE;
+            }
+            if (GetGlobalVariableID("Engine.HardwareRenderer") != 0xFF)
+                Engine.gameRenderType = gameRenderTypes[GetGlobalVariableByName("Engine.HardwareRenderer")];
 #if RETRO_USING_OPENGL
             for (int i = 0; i < HW_TEXTURE_COUNT; ++i) {
                 glDeleteTextures(1, &gfxTextureID[i]);

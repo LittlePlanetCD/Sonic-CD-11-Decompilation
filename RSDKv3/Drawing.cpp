@@ -104,6 +104,11 @@ int InitRenderDevice()
     sprintf(gameTitle, "%s%s", Engine.gameWindowText, Engine.usingDataFile_Config ? "" : " (Using Data Folder)");
 
 #if RETRO_USING_SDL2
+
+#if RETRO_PLATFORM == RETRO_ANDROID
+    setenv("SDL_AUDIODRIVER", "openslES", 1);   // This is a workaround to eliminate audio delay, since we use SDL 2.28 (as of this commit this is coming from.)
+                                                // This could be resolved by properly updating SDL to 2.32.10, but that'd involve updating a lot of app related files.
+#endif
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");

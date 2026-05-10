@@ -9,14 +9,12 @@ A complete decompilation of Retro Engine v3, coupled with a few additions.
   * Windows
     * Via Steam, whether it's the original release or from [Sonic Origins](https://store.steampowered.com/app/1794960)
     * Via the Epic Games Store, from [Sonic Origins](https://store.epicgames.com/en-US/p/sonic-origins)
-  * [iOS (Via the App Store)](https://apps.apple.com/us/app/sonic-cd-classic/id454316134)
-    * A tutorial for finding the game assets from the iOS version can be found [here](https://gamebanana.com/tuts/14491).
-  * Android
-    * [Via Google Play](https://play.google.com/store/apps/details?id=com.sega.soniccd.classic)
-    * [Via Amazon](https://www.amazon.com/Sega-of-America-Sonic-CD/dp/B008K9UZY4/)
-    * A tutorial for finding the game assets from the Android version can be found [here](https://gamebanana.com/tuts/14942).
+  * Nintendo Switch, from [Sonic Origins on the eShop](https://www.nintendo.com/games/detail/sonic-origins-switch/)
+  * iOS, Via the App Store
+  * Android, Via Google Play or Amazon
+    * Note that the mobile releases have been delisted. However, if you have downloaded one of these releases in the past, you can redownload it at any time in your device or store account's purchase history.
 
-Even if your platform isn't supported by the official releases, you **must** buy or officially download it for the assets (you don't need to run the official release, you just need the game assets). Note that only FMV files from the original Steam release of the game are supported; mobile and Origins video files do not work.
+Even if your platform isn't supported by the official releases, you **must** buy or officially download it for the assets (you don't need to run the official release, you just need the game assets). See [here](https://rsdkmodding.com/Guides/Games/SonicCD/Datapack/) for a guide on how to find the required assets from your legally obtained copy of the game. Note that only FMV files from the original Steam release of the game are supported; mobile and Origins video files do not work.
 
 # Advantages over the PC version of Sonic CD
 * Sharp, pixel-perfect display.

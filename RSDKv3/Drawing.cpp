@@ -106,8 +106,9 @@ int InitRenderDevice()
 #if RETRO_USING_SDL2
 
 #if RETRO_PLATFORM == RETRO_ANDROID
-    setenv("SDL_AUDIODRIVER", "openslES", 1);   // This is a workaround to eliminate audio delay, since we use SDL 2.28 (as of this commit this is coming from.)
-                                                // This could be resolved by properly updating SDL to 2.32.10, but that'd involve updating a lot of app related files.
+    setenv("SDL_AUDIODRIVER", "openslES",
+           1); // This is a workaround to eliminate audio delay, since we use SDL 2.28 (as of this commit this is coming from.)
+               // This could be resolved by properly updating SDL to 2.32.10, but that'd involve updating a lot of app related files.
 #endif
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -183,9 +184,9 @@ int InitRenderDevice()
         return 0;
     }
 
-    if(Engine.useHQModes) {
+    if (Engine.useHQModes) {
         Engine.screenBuffer2x =
-        SDL_CreateTexture(Engine.renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2);
+            SDL_CreateTexture(Engine.renderer, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2);
 
         if (!Engine.screenBuffer2x) {
             PrintLog("ERROR: failed to create screen buffer HQ!\nerror msg: %s", SDL_GetError());
@@ -371,7 +372,7 @@ int InitRenderDevice()
 #endif
 
     if (renderType == RENDER_SW) {
-        Engine.frameBuffer   = new ushort[GFX_LINESIZE * SCREEN_YSIZE];
+        Engine.frameBuffer = new ushort[GFX_LINESIZE * SCREEN_YSIZE];
         memset(Engine.frameBuffer, 0, (GFX_LINESIZE * SCREEN_YSIZE) * sizeof(ushort));
         if (Engine.useHQModes) {
             Engine.frameBuffer2x = new ushort[GFX_LINESIZE_DOUBLE * (SCREEN_YSIZE * 2)];
@@ -544,9 +545,9 @@ void FlipScreen()
                 ushort *framebufferPtr = Engine.frameBuffer;
                 for (int y = 0; y < (SCREEN_YSIZE / 2) + 12; ++y) {
                     for (int x = 0; x < SCREEN_XSIZE; ++x) {
-                        *pixels = *framebufferPtr;
-                        *(pixels + 1) = *framebufferPtr;
-                        *(pixels + lineWidth) = *framebufferPtr;
+                        *pixels                   = *framebufferPtr;
+                        *(pixels + 1)             = *framebufferPtr;
+                        *(pixels + lineWidth)     = *framebufferPtr;
                         *(pixels + lineWidth + 1) = *framebufferPtr;
                         pixels += 2;
                         framebufferPtr++;
@@ -590,10 +591,18 @@ void FlipScreen()
             SDL_DestroyTexture(texTarget);
         }
         else {
-            // Apply dimming
-            SDL_SetRenderDrawColor(Engine.renderer, 0, 0, 0, 0xFF - (dimAmount * 0xFF));
-            if (dimAmount < 1.0)
+            if (Engine.gameMode == ENGINE_VIDEOWAIT) {
+                // Apply dimming
+                SDL_SetRenderDrawColor(Engine.renderer, 0, 0, 0, fadeMode);
                 SDL_RenderFillRect(Engine.renderer, NULL);
+            }
+            else {
+                // Apply dimming
+                SDL_SetRenderDrawColor(Engine.renderer, 0, 0, 0, 0xFF - (dimAmount * 0xFF));
+                if (dimAmount < 1.0)
+                    SDL_RenderFillRect(Engine.renderer, NULL);
+            }
+
             // no change here
             SDL_RenderPresent(Engine.renderer);
         }
@@ -1052,12 +1061,12 @@ void ReleaseRenderDevice()
     }
 
 #if RETRO_USING_OPENGL
-	if (Engine.glContext) {
-		for (int i = 0; i < HW_TEXTURE_COUNT; i++) glDeleteTextures(1, &gfxTextureID[i]);
+    if (Engine.glContext) {
+        for (int i = 0; i < HW_TEXTURE_COUNT; i++) glDeleteTextures(1, &gfxTextureID[i]);
 #if RETRO_USING_SDL2
-		SDL_GL_DeleteContext(Engine.glContext);
+        SDL_GL_DeleteContext(Engine.glContext);
 #endif
-	}
+    }
 #endif
 
 #if RETRO_USING_SDL2
@@ -1103,16 +1112,16 @@ void SetFullScreen(bool fs)
         SDL_GetRendererOutputSize(Engine.renderer, &winW, &winH);
 #endif
 
-        scaleH       = winH / (float)SCREEN_YSIZE;
+        scaleH = winH / (float)SCREEN_YSIZE;
 
-        width        = scaleH * (float)SCREEN_XSIZE;
-        height       = winH;
+        width  = scaleH * (float)SCREEN_XSIZE;
+        height = winH;
 
         if (width > winW) {
             width = winW;
 
             float scaleW = winW / (float)SCREEN_XSIZE;
-            height = scaleW * (float)SCREEN_YSIZE;
+            height       = scaleW * (float)SCREEN_YSIZE;
 
             viewOffsetX = 0;
             viewOffsetY = abs(winH - height) / 2;
@@ -1448,10 +1457,10 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
 
 void ScaleViewport(int width, int height)
 {
-    virtualWidth  = width;
-    virtualHeight = height;
-    virtualX      = 0;
-    virtualY      = 0;
+    virtualWidth        = width;
+    virtualHeight       = height;
+    virtualX            = 0;
+    virtualY            = 0;
     float virtualAspect = (float)width / height;
     float realAspect    = (float)viewWidth / viewHeight;
     if (virtualAspect < realAspect) {
@@ -1529,7 +1538,7 @@ void UpdateTextureBufferWithTiles()
         for (int h = 0; h < 512; h += 16) {
             for (int w = 0; w < 512; w += 16) {
                 int dataPos = tileIndex++ << 8;
-                int bufPos = w + (h * HW_TEXTURE_SIZE);
+                int bufPos  = w + (h * HW_TEXTURE_SIZE);
                 for (int y = 0; y < TILE_SIZE; y++) {
                     for (int x = 0; x < TILE_SIZE; x++) {
                         if (tilesetGFXData[dataPos] > 0)
@@ -1685,8 +1694,8 @@ void UpdateTextureBufferWithSortedSprites()
             i = SURFACE_COUNT;
         }
         else {
-            gfxSurface[surfID].texStartX = 0;
-            sortedSurfaceList[sortedSurfaceCount++]          = surfID;
+            gfxSurface[surfID].texStartX            = 0;
+            sortedSurfaceList[sortedSurfaceCount++] = surfID;
         }
     }
 
@@ -1701,7 +1710,7 @@ void UpdateTextureBufferWithSortedSprites()
         int storeTexX = 0;
         int storeTexY = 0;
 
-        bool inLoop          = true;
+        bool inLoop = true;
         while (inLoop) {
             inLoop = false;
             if (sortedSurface->height == HW_TEXTURE_SIZE)
@@ -1725,7 +1734,8 @@ void UpdateTextureBufferWithSortedSprites()
 
                             int width  = abs(sortedSurface->texStartX - surface->texStartX);
                             int height = abs(sortedSurface->texStartY - surface->texStartY);
-                            if (sortedSurface->width > width && sortedSurface->height > height && surface->width > width && surface->height > height) {
+                            if (sortedSurface->width > width && sortedSurface->height > height && surface->width > width
+                                && surface->height > height) {
                                 checkSort = false;
                                 break;
                             }
@@ -1774,7 +1784,8 @@ void UpdateTextureBufferWithSortedSprites()
 
                                 int width  = abs(sortedSurface->texStartX - surface->texStartX);
                                 int height = abs(sortedSurface->texStartY - surface->texStartY);
-                                if (sortedSurface->width > width && sortedSurface->height > height && surface->width > width && surface->height > height) {
+                                if (sortedSurface->width > width && sortedSurface->height > height && surface->width > width
+                                    && surface->height > height) {
                                     checkSort = false;
                                     break;
                                 }
@@ -1791,7 +1802,8 @@ void UpdateTextureBufferWithSortedSprites()
                         for (int s = 0; s < SURFACE_COUNT; s++) {
                             GFXSurface *surface = &gfxSurface[s];
                             if (surface->texStartX > -1 && s != sortedSurfaceList[i] && sortedSurface->texStartX < surface->texStartX + surface->width
-                                && sortedSurface->texStartX >= surface->texStartX && sortedSurface->texStartY < surface->texStartY + surface->height) {
+                                && sortedSurface->texStartX >= surface->texStartX
+                                && sortedSurface->texStartY < surface->texStartY + surface->height) {
                                 inLoop = true;
                                 sortedSurface->texStartX += sortedSurface->width;
                                 if (sortedSurface->texStartX + sortedSurface->width > HW_TEXTURE_SIZE) {
@@ -1806,7 +1818,8 @@ void UpdateTextureBufferWithSortedSprites()
             }
         }
 
-        // sega forever hack, basically panic prevention, will allow the game to override the tileset stuff to store more spritesheets (used in the menu)
+        // sega forever hack, basically panic prevention, will allow the game to override the tileset stuff to store more spritesheets (used in the
+        // menu)
         if (sortedSurface->texStartX >= HW_TEXTURE_SIZE || sortedSurface->texStartY >= HW_TEXTURE_SIZE) {
             sortedSurface->texStartX = storeTexX;
             sortedSurface->texStartY = storeTexY;

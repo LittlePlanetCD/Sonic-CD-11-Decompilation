@@ -1384,15 +1384,24 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_XSIZE * 2, SCREEN_YSIZE * 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 #endif
 
-    int widthFix = 1;
-    if (SCREEN_XSIZE <= 262) {
-        widthFix++;
-    }
+    // scaling calc for width (fixes issues with hardware rendering)
+    float scaleW = (float)HW_TEXTURE_SIZE / (float)(1 << bufferW);
+
+#if RETRO_GAMEPLATFORM == RETRO_MOBILE
+    // use a 0.5f subtraction to account for precision issues on android (attempt to, at least).
+    short vSize = (SCREEN_XSIZE - 0.5f) * scaleW;
+    short uSize = (SCREEN_YSIZE - 0.5f) * 4;
+#else
+    // PC doesn't need 0.5f stuff, it's actually pixel perfect.
+    // but don't fullscreen with a width past your actual monitor, it WILL mixel.
+    short vSize = (SCREEN_XSIZE) * scaleW;
+    short uSize = (SCREEN_YSIZE) * 4;
+#endif
 
     screenRect[0].x = -1;
     screenRect[0].y = 1;
     screenRect[0].u = 0;
-    screenRect[0].v = SCREEN_XSIZE * 2 * widthFix;
+    screenRect[0].v = vSize;
 
     screenRect[1].x = 1;
     screenRect[1].y = 1;
@@ -1401,12 +1410,12 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
 
     screenRect[2].x = -1;
     screenRect[2].y = -1;
-    screenRect[2].u = (SCREEN_YSIZE - 0.5) * 4;
-    screenRect[2].v = SCREEN_XSIZE * 2 * widthFix;
+    screenRect[2].u = uSize;
+    screenRect[2].v = vSize;
 
     screenRect[3].x = 1;
     screenRect[3].y = -1;
-    screenRect[3].u = (SCREEN_YSIZE - 0.5) * 4;
+    screenRect[3].u = uSize;
     screenRect[3].v = 0;
 
     // HW_TEXTURE_SIZE == 1.0 due to the scaling we did on the Texture Matrix earlier

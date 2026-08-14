@@ -1,5 +1,6 @@
 #include "RetroEngine.hpp"
 #include <string>
+#include <vector>
 
 int currentVideoFrame = 0;
 int videoFrameCount   = 0;
@@ -331,11 +332,24 @@ void SetupVideoBuffer(int width, int height)
 
     if (!Engine.videoBuffer)
         PrintLog("Failed to create video buffer!");
+
+    if (Engine.videoBuffer)
+        SDL_FillRect(Engine.videoBuffer, NULL, SDL_MapRGBA(Engine.videoBuffer->format, 0, 0, 0, 255));
 #elif RETRO_USING_SDL2
     Engine.videoBuffer = SDL_CreateTexture(Engine.renderer, SDL_PIXELFORMAT_YV12, SDL_TEXTUREACCESS_STREAMING, width, height);
 
     if (!Engine.videoBuffer)
         PrintLog("Failed to create video buffer!");
+
+    if (Engine.videoBuffer) {
+        int hw = width / 2;
+        int hh = height / 2;
+
+        auto y  = std::vector<byte>(width * height, 0x00);
+        auto uv = std::vector<byte>(hw * hh, 0x80);
+
+        SDL_UpdateYUVTexture(Engine.videoBuffer, NULL, y.data(), width, uv.data(), hw, uv.data(), hw);
+    }
 #endif
 }
 

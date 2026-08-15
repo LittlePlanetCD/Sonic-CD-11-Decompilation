@@ -1358,9 +1358,9 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
 
     if (retroBuffer2x)
         glDeleteTextures(1, &retroBuffer2x);
-
+#endif
     // Setup framebuffer texture
-
+    // bufferW here is decoupled from USING_OPENGL because we use it in some code down where screenRect is here, cuz that's used even without OpenGL.
     int bufferW = 0;
     int val     = 0;
     do {
@@ -1368,6 +1368,7 @@ void SetScreenDimensions(int width, int height, int winWidth, int winHeight)
     } while (val < GFX_LINESIZE);
     bufferW--;
 
+#if RETRO_USING_OPENGL
     int bufferH = 0;
     val         = 0;
     do {

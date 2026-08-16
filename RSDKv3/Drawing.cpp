@@ -4669,10 +4669,10 @@ void Draw3DSkyLayer(int layerID)
             }
             int xBuffer    = layerYPos / (i << 8) * -cosValue >> 9;
             int yBuffer    = sinValue * (layerYPos / (i << 8)) >> 9;
-            int XPos       = layerXPos + (3 * sinValue * (layerYPos / (i << 8)) >> 2) - xBuffer * GFX_LINESIZE;
-            int YPos       = layerZPos + (3 * cosValue * (layerYPos / (i << 8)) >> 2) - yBuffer * GFX_LINESIZE;
+            int XPos       = layerXPos + (3 * sinValue * (layerYPos / (i << 8)) >> 2) - xBuffer * SCREEN_XSIZE;
+            int YPos       = layerZPos + (3 * cosValue * (layerYPos / (i << 8)) >> 2) - yBuffer * SCREEN_XSIZE;
             int lineBuffer = 0;
-            while (lineBuffer < GFX_LINESIZE * 2) {
+            while (lineBuffer < GFX_LINESIZE_DOUBLE) {
                 int tileX = XPos >> 12;
                 int tileY = YPos >> 12;
                 if (tileX > -1 && tileX < layerWidth && tileY > -1 && tileY < layerHeight) {
